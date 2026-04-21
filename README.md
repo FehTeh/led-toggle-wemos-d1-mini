@@ -40,10 +40,10 @@ A simple MicroPython project for the Wemos D1 Mini (ESP8266) board that creates 
      ```
 
 4. **Upload files to the device:**
-   Make the script executable and run it:
    ```bash
-   chmod +x upload.sh
-   ./upload.sh
+   mpremote fs mkdir -p www
+   
+   mpremote fs cp -r src/ :
    ```
 
 ## Usage
