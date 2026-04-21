@@ -2,6 +2,10 @@
 
 A simple MicroPython project for the Wemos D1 Mini (ESP8266) board that creates a Wi-Fi access point and serves a web page to control the built-in LED.
 
+<p align="center">
+  <img src="docs/preview.gif" alt="LED Demo">
+</p>
+
 ## Features
 
 - Creates a Wi-Fi access point (AP mode)
