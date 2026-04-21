@@ -40,10 +40,10 @@ A simple MicroPython project for the Wemos D1 Mini (ESP8266) board that creates 
      ```
 
 4. **Upload files to the device:**
+   Make the script executable and run it:
    ```bash
-   mpremote cp config.py :config.py
-   mpremote cp main.py :main.py
-   mpremote cp boot.py :boot.py
+   chmod +x upload.sh
+   ./upload.sh
    ```
 
 ## Usage
@@ -60,6 +60,7 @@ A simple MicroPython project for the Wemos D1 Mini (ESP8266) board that creates 
 - `main.py`: Main application code - sets up Wi-Fi AP and web server
 - `config.py`: Configuration file for Wi-Fi SSID and password
 - `boot.py`: Boot script (runs on device startup)
+- `www`: Boot script (runs on device startup)
 
 ## Troubleshooting
 

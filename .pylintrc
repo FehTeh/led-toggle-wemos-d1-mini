@@ -1,0 +1,11 @@
+[MASTER]
+# Ignore modules that only exist in MicroPython
+extension-pkg-allow-list=machine,network,utime,uhashlib,ujson,uos,urandom,ure,uselect,usocket,ussl,ustruct,utime,uzlib
+
+[MESSAGES CONTROL]
+# Disable docstring warnings (optional, to keep code clean)
+disable=C0114,C0115,C0116,W0718
+
+[TYPECHECK]
+# Prevent Pylint from complaining about members of 'machine' and 'network'
+generated-members=machine.*,network.*

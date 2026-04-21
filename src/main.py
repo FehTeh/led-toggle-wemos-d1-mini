@@ -1,7 +1,15 @@
-import network
+#main.py
+"""
+Main module to control ESP8266 via Web.
+This script sets up the ESP8266 as a Wi-Fi access point and runs a simple web server.
+The web server serves an HTML page that allows the user to toggle the built-in LED on and off.
+"""
+
+import gc
 import socket
+import network
 from machine import Pin
-import config
+from src import config
 
 # 1. Hardware Setup (Built-in LED on Wemos D1 Mini is GPIO 2)
 # Note: On ESP8266, the internal LED uses inverted logic (0=ON, 1=OFF)
@@ -15,18 +23,15 @@ ap.active(True)
 
 print('Access Point Active. IP Address:', ap.ifconfig()[0])
 
-def get_html(status):
-    color = "red" if status == "ON" else "green"
-    return """<!DOCTYPE html>
-    <html>
-        <body>
-            <h1>Wemos Control</h1>
-            <p>Status: <b>""" + status + """</b></p>
-            <form method="POST">
-                <input type="submit" value="TOGGLE LED" style="height:100px; width:200px; background:""" + color + """; color:white;">
-            </form>
-        </body>
-    </html>"""
+def get_html_from_file(status):
+    """Reads index.html and replaces status placeholder."""
+    try:
+        with open('index.html', 'r', encoding='utf-8') as f:
+            html = f.read()
+        return html.replace('{{status}}', status)
+    except OSError as e:
+        print('Get HTML Error:', e)
+        return "<h1>Error: www/index.html not found</h1>"
 
 # 3. Web Server Setup
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
@@ -41,18 +46,20 @@ while True:
     try:
         conn, addr = s.accept()
         request = conn.recv(1024).decode('utf-8')
-        
+
         if "POST /" in request:
             led.value(not led.value())
-        
-        # Force a small delay to ensure buffer is ready
+
         status_text = "ON" if led.value() == 0 else "OFF"
-        response = get_html(status_text)
-        
-        # Send in one go
+
+        # Get the template and process it
+        response = get_html_from_file(status_text)
+
         conn.send('HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n')
-        conn.sendall(response) # sendall ensures the whole string goes out
+        conn.sendall(response)
         conn.close()
-    except Exception as e:
+        gc.collect()
+    except OSError as e:
         print("Error:", e)
-        if 'conn' in locals(): conn.close()
+        if 'conn' in locals():
+            conn.close()
