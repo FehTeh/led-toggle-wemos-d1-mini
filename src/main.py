@@ -7,9 +7,9 @@ The web server serves an HTML page that allows the user to toggle the built-in L
 
 import gc
 import socket
-import network
-from machine import Pin
-from src import config
+import network # pylint: disable=import-error
+from machine import Pin # pylint: disable=import-error
+import config
 
 # 1. Hardware Setup (Built-in LED on Wemos D1 Mini is GPIO 2)
 # Note: On ESP8266, the internal LED uses inverted logic (0=ON, 1=OFF)
@@ -26,7 +26,7 @@ print('Access Point Active. IP Address:', ap.ifconfig()[0])
 def get_html_from_file(status):
     """Reads index.html and replaces status placeholder."""
     try:
-        with open('index.html', 'r', encoding='utf-8') as f:
+        with open('www/index.html', 'r', encoding='utf-8') as f:
             html = f.read()
         return html.replace('{{status}}', status)
     except OSError as e:
